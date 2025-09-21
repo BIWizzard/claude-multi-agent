@@ -1,0 +1,29 @@
+{
+  "name": "claude-multi-agent-learning-lab",
+  "version": "1.0.0",
+  "description": "Interactive web interface for multi-agent orchestration learning exercises",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview --port 3000"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "alpinejs": "^3.13.0",
+    "marked": "^11.0.0",
+    "dompurify": "^3.0.0"
+  },
+  "keywords": [
+    "claude-code",
+    "multi-agent",
+    "learning",
+    "education",
+    "interactive"
+  ],
+  "author": "Multi-Agent Learning Lab",
+  "license": "MIT"
+}

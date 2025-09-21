@@ -1,0 +1,623 @@
+---
+import type { LearningObjectivesProps } from '../../types';
+
+interface Props extends LearningObjectivesProps {
+}
+
+const {
+  objectives,
+  completedObjectives = [],
+  className = ''
+} = Astro.props;
+
+const isCompleted = (objective: string) => {
+  return completedObjectives.includes(objective);
+};
+
+const completionPercentage = Math.round((completedObjectives.length / objectives.length) * 100);
+const allCompleted = completedObjectives.length === objectives.length;
+---
+
+<section class={`learning-objectives ${className}`} aria-labelledby="objectives-heading">
+  <header class="objectives-header">
+    <div class="objectives-title-section">
+      <h3 id="objectives-heading" class="objectives-title">
+        <span class="objectives-icon" aria-hidden="true">🎯</span>
+        Learning Objectives
+      </h3>
+
+      {allCompleted && (
+        <div class="completion-badge" aria-label="All objectives completed">
+          <span class="completion-icon" aria-hidden="true">✅</span>
+          <span class="completion-text">Complete!</span>
+        </div>
+      )}
+    </div>
+
+    {completedObjectives.length > 0 && (
+      <div class="objectives-progress">
+        <div class="progress-info">
+          <span class="progress-text">
+            {completedObjectives.length} of {objectives.length} completed
+          </span>
+          <span class="progress-percentage">
+            {completionPercentage}%
+          </span>
+        </div>
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-label={`Learning objectives progress: ${completionPercentage}%`}
+          aria-valuenow={completedObjectives.length}
+          aria-valuemin="0"
+          aria-valuemax={objectives.length}
+        >
+          <div
+            class="progress-fill"
+            style={`width: ${completionPercentage}%`}
+          ></div>
+        </div>
+      </div>
+    )}
+  </header>
+
+  <div class="objectives-content">
+    <ul class="objectives-list" role="list">
+      {objectives.map((objective, index) => {
+        const completed = isCompleted(objective);
+        const objectiveId = `objective-${index}`;
+
+        return (
+          <li
+            class={`objective-item ${completed ? 'objective-item--completed' : ''}`}
+            role="listitem"
+          >
+            <div class="objective-checkbox">
+              <input
+                type="checkbox"
+                id={objectiveId}
+                checked={completed}
+                class="objective-input sr-only"
+                aria-describedby={`${objectiveId}-text`}
+                data-objective={objective}
+              />
+              <label
+                for={objectiveId}
+                class="objective-label"
+                aria-label={`${completed ? 'Completed' : 'Not completed'}: ${objective}`}
+              >
+                <span class="checkbox-visual" aria-hidden="true">
+                  <span class="checkbox-icon">
+                    {completed ? '✓' : '○'}
+                  </span>
+                </span>
+                <span
+                  id={`${objectiveId}-text`}
+                  class="objective-text"
+                >
+                  {objective}
+                </span>
+              </label>
+            </div>
+
+            {completed && (
+              <div class="objective-completion" aria-hidden="true">
+                <span class="completion-indicator">✨</span>
+              </div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+
+  {allCompleted && (
+    <footer class="objectives-footer">
+      <div class="celebration-message">
+        <span class="celebration-icon" aria-hidden="true">🎉</span>
+        <p class="celebration-text">
+          Excellent work! You've mastered all the learning objectives for this section.
+        </p>
+      </div>
+    </footer>
+  )}
+</section>
+
+<style>
+  .learning-objectives {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: var(--bg-objectives, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 1rem;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .learning-objectives::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color, #3182ce), var(--secondary-color, #805ad5));
+  }
+
+  .objectives-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .objectives-title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .objectives-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary, #1a202c);
+    line-height: 1.2;
+  }
+
+  .objectives-icon {
+    font-size: 1.75rem;
+    line-height: 1;
+  }
+
+  .completion-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--success-light, #f0fff4);
+    border: 1px solid var(--success-color, #38a169);
+    border-radius: 9999px;
+    color: var(--success-color, #38a169);
+    font-weight: 600;
+    font-size: 0.875rem;
+    animation: slideInFromRight 0.3s ease-out;
+  }
+
+  .completion-icon {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .completion-text {
+    line-height: 1;
+  }
+
+  .objectives-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary, #4a5568);
+  }
+
+  .progress-percentage {
+    color: var(--primary-color, #3182ce);
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-secondary, #e2e8f0);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color, #3182ce), var(--primary-hover, #2c5282));
+    border-radius: 4px;
+    transition: width 0.5s ease-in-out;
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  .objectives-content {
+    flex: 1;
+  }
+
+  .objectives-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .objective-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-primary, #ffffff);
+    border: 1px solid var(--border-light, #f1f5f9);
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .objective-item:hover {
+    border-color: var(--border-hover, #cbd5e0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .objective-item--completed {
+    background: var(--success-very-light, #f7fefc);
+    border-color: var(--success-light-border, #c6f6d5);
+  }
+
+  .objective-checkbox {
+    flex: 1;
+  }
+
+  .objective-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .objective-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-primary, #1a202c);
+  }
+
+  .checkbox-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid var(--border-color, #e2e8f0);
+    border-radius: 0.375rem;
+    background: var(--bg-primary, #ffffff);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+
+  .objective-item--completed .checkbox-visual {
+    border-color: var(--success-color, #38a169);
+    background: var(--success-color, #38a169);
+    color: white;
+  }
+
+  .checkbox-icon {
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1;
+    transition: all 0.2s ease;
+  }
+
+  .objective-item--completed .checkbox-icon {
+    animation: checkmarkPop 0.3s ease-out;
+  }
+
+  .objective-text {
+    flex: 1;
+    line-height: 1.6;
+  }
+
+  .objective-item--completed .objective-text {
+    color: var(--success-color, #38a169);
+    font-weight: 600;
+  }
+
+  .objective-completion {
+    display: flex;
+    align-items: center;
+    margin-top: 0.125rem;
+  }
+
+  .completion-indicator {
+    font-size: 1.25rem;
+    line-height: 1;
+    animation: sparkle 0.5s ease-out;
+  }
+
+  .objectives-footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light, #f1f5f9);
+  }
+
+  .celebration-message {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--success-light, #f0fff4);
+    border: 1px solid var(--success-color, #38a169);
+    border-radius: 0.75rem;
+    animation: celebrationSlideIn 0.5s ease-out;
+  }
+
+  .celebration-icon {
+    font-size: 2rem;
+    line-height: 1;
+    animation: bounce 1s infinite;
+  }
+
+  .celebration-text {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--success-color, #38a169);
+    line-height: 1.5;
+  }
+
+  /* Screen reader only class */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Animations */
+  @keyframes slideInFromRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes checkmarkPop {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes sparkle {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.2);
+    }
+  }
+
+  @keyframes celebrationSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+
+  /* Responsive design */
+  @media (max-width: 640px) {
+    .learning-objectives {
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .objectives-title {
+      font-size: 1.25rem;
+    }
+
+    .objectives-title-section {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .objective-item {
+      padding: 0.75rem;
+    }
+
+    .objective-label {
+      font-size: 0.875rem;
+    }
+
+    .celebration-message {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .learning-objectives {
+      --bg-objectives: #1a202c;
+      --bg-primary: #2d3748;
+      --text-primary: #f7fafc;
+      --text-secondary: #a0aec0;
+      --border-color: #4a5568;
+      --border-light: #2d3748;
+      --bg-secondary: #4a5568;
+    }
+
+    .objective-item:hover {
+      --border-hover: #718096;
+    }
+
+    .objective-item--completed {
+      --success-very-light: #1a2e1a;
+      --success-light-border: #2f855a;
+    }
+
+    .completion-badge {
+      --success-light: #1a2e1a;
+    }
+
+    .celebration-message {
+      --success-light: #1a2e1a;
+    }
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .learning-objectives {
+      border-width: 2px;
+    }
+
+    .objective-item {
+      border-width: 2px;
+    }
+
+    .checkbox-visual {
+      border-width: 3px;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .progress-fill,
+    .objective-item,
+    .checkbox-visual,
+    .checkbox-icon,
+    .completion-indicator,
+    .completion-badge,
+    .celebration-message,
+    .celebration-icon {
+      animation: none;
+      transition: none;
+    }
+
+    .objective-item:hover {
+      transform: none;
+    }
+
+    .progress-fill::after {
+      animation: none;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .learning-objectives {
+      break-inside: avoid;
+      box-shadow: none;
+      border: 2px solid #000;
+    }
+
+    .objectives-title,
+    .objective-text {
+      color: #000 !important;
+    }
+
+    .celebration-icon,
+    .completion-indicator {
+      color: #000 !important;
+    }
+  }
+</style>
+
+<script>
+  // Interactive checkbox functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const objectiveInputs = document.querySelectorAll('.objective-input');
+
+    objectiveInputs.forEach(input => {
+      input.addEventListener('change', (e) => {
+        const checkbox = e.target as HTMLInputElement;
+        const objectiveItem = checkbox.closest('.objective-item');
+        const objective = checkbox.dataset.objective;
+
+        if (objectiveItem) {
+          if (checkbox.checked) {
+            objectiveItem.classList.add('objective-item--completed');
+
+            // Dispatch custom event for parent component to handle
+            document.dispatchEvent(new CustomEvent('objective:completed', {
+              detail: { objective }
+            }));
+          } else {
+            objectiveItem.classList.remove('objective-item--completed');
+
+            // Dispatch custom event for parent component to handle
+            document.dispatchEvent(new CustomEvent('objective:uncompleted', {
+              detail: { objective }
+            }));
+          }
+        }
+      });
+    });
+  });
+</script>

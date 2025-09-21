@@ -1,0 +1,42 @@
+{
+  "id": "handoff-1758397192951",
+  "fromSession": "test-session-001",
+  "timestamp": "2025-09-20T19:39:52.951Z",
+  "context": {
+    "repository": {
+      "objectives": "learning multi-agent patterns"
+    },
+    "exercise": {
+      "phase": "implementation"
+    },
+    "agents": {
+      "coordinator": "active",
+      "executor": "ready"
+    },
+    "timestamp": "2025-09-20T19:39:52.952Z"
+  },
+  "state": {
+    "activeTasks": [
+      "task-001"
+    ],
+    "completedTasks": [],
+    "decisions": [
+      "use-hierarchical-context"
+    ],
+    "blockers": []
+  },
+  "progress": {
+    "phase": "Phase 1: Setup & Structure",
+    "completion": 60,
+    "milestones": [
+      "context-system-ready"
+    ]
+  },
+  "nextSteps": [
+    "test-agent-coordination"
+  ],
+  "validation": {
+    "valid": true,
+    "timestamp": "2025-09-20T19:39:52.952Z"
+  }
+}

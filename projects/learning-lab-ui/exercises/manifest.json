@@ -1,0 +1,162 @@
+{
+  "exercises": [
+    {
+      "id": "01-fundamentals",
+      "title": "Claude Code Fundamentals",
+      "description": "Master project structure and context management for multi-agent workflows through hands-on implementation.",
+      "duration": "2 hours",
+      "difficulty": "Beginner",
+      "objectives": [
+        "Understand hierarchical context management patterns",
+        "Create agent isolation to prevent confusion",
+        "Implement session handoff procedures",
+        "Build reusable project structure templates",
+        "Extract patterns to knowledge base"
+      ],
+      "prerequisites": [
+        "Basic familiarity with Claude Code",
+        "Understanding of file structure organization",
+        "Willingness to learn through hands-on practice"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "title": "Exercise Overview",
+          "type": "reading",
+          "estimatedTime": "10 minutes",
+          "description": "Understand what you'll build and why it matters"
+        },
+        {
+          "id": "concepts",
+          "title": "Key Concepts",
+          "type": "reading",
+          "estimatedTime": "15 minutes",
+          "description": "Learn about context management and agent coordination"
+        },
+        {
+          "id": "setup",
+          "title": "Project Setup",
+          "type": "action",
+          "estimatedTime": "20 minutes",
+          "description": "Create the foundational structure in Claude Code"
+        },
+        {
+          "id": "context-implementation",
+          "title": "Context Management Implementation",
+          "type": "action",
+          "estimatedTime": "45 minutes",
+          "description": "Build the context management system"
+        },
+        {
+          "id": "agent-coordination",
+          "title": "Agent Coordination",
+          "type": "action",
+          "estimatedTime": "30 minutes",
+          "description": "Test agent isolation and communication"
+        },
+        {
+          "id": "validation",
+          "title": "Testing & Validation",
+          "type": "validation",
+          "estimatedTime": "15 minutes",
+          "description": "Verify your implementation works correctly"
+        },
+        {
+          "id": "reflection",
+          "title": "Knowledge Extraction",
+          "type": "reflection",
+          "estimatedTime": "15 minutes",
+          "description": "Capture learnings and prepare for next exercise"
+        }
+      ]
+    },
+    {
+      "id": "02-multi-agent",
+      "title": "Basic Multi-Agent Coordination",
+      "description": "Implement coordinator-worker patterns with real task distribution and communication.",
+      "duration": "3 hours",
+      "difficulty": "Intermediate",
+      "objectives": [
+        "Implement task distribution strategies",
+        "Build work queue management",
+        "Create result aggregation patterns",
+        "Handle errors across multiple agents"
+      ],
+      "prerequisites": [
+        "Completed Exercise 01",
+        "Understanding of context management",
+        "Basic programming concepts"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "title": "Multi-Agent Overview",
+          "type": "reading",
+          "estimatedTime": "15 minutes",
+          "description": "Understanding multi-agent coordination patterns"
+        }
+      ]
+    },
+    {
+      "id": "03-advanced",
+      "title": "Advanced Orchestration",
+      "description": "Master complex workflows with dynamic agent allocation and performance optimization.",
+      "duration": "4 hours",
+      "difficulty": "Advanced",
+      "objectives": [
+        "Implement dynamic agent spawning",
+        "Build complex state management",
+        "Optimize performance at scale",
+        "Create fault tolerance patterns"
+      ],
+      "prerequisites": [
+        "Completed Exercises 01 & 02",
+        "Strong understanding of agent patterns",
+        "Experience with state management"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "title": "Advanced Patterns Overview",
+          "type": "reading",
+          "estimatedTime": "20 minutes",
+          "description": "Understanding advanced orchestration concepts"
+        }
+      ]
+    },
+    {
+      "id": "04-production",
+      "title": "Production Integration",
+      "description": "Integrate with external tools, frameworks, and deploy production-ready patterns.",
+      "duration": "3 hours",
+      "difficulty": "Advanced",
+      "objectives": [
+        "Integrate MCP servers",
+        "Coordinate external APIs",
+        "Build tool abstraction layers",
+        "Deploy production patterns"
+      ],
+      "prerequisites": [
+        "Completed all previous exercises",
+        "Production deployment experience",
+        "Understanding of API integration"
+      ],
+      "sections": [
+        {
+          "id": "overview",
+          "title": "Production Patterns Overview",
+          "type": "reading",
+          "estimatedTime": "15 minutes",
+          "description": "Understanding production deployment patterns"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-01-20",
+    "totalExercises": 4,
+    "estimatedTotalTime": "12 hours",
+    "skillLevel": "Beginner to Advanced"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "claude-code-fundamentals",
+  "version": "1.0.0",
+  "description": "Learning exercise for Claude Code multi-agent fundamentals",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["claude-code", "multi-agent", "learning"],
+  "author": "Multi-Agent Learning",
+  "license": "MIT"
+}

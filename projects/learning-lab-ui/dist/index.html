@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Multi-Agent Learning Lab</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script type="module" crossorigin src="/assets/index-BjfSaAfP.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CVhi3MW2.css">
+</head>
+<body>
+  <div id="app" x-data="learningLab()" x-init="init()">
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <h1 class="logo">
+          🤖 Claude Multi-Agent Learning Lab
+        </h1>
+        <nav class="nav">
+          <button
+            @click="showBehindScenes = !showBehindScenes"
+            class="btn btn-outline"
+            :class="{ 'btn-primary': showBehindScenes }"
+          >
+            🔍 Behind the Scenes
+          </button>
+          <button
+            x-show="currentExercise"
+            @click="showOverview = true"
+            class="btn btn-outline"
+          >
+            📊 Overview
+          </button>
+          <button
+            x-show="currentExercise"
+            @click="showJourney = !showJourney"
+            class="btn btn-outline"
+            :class="{ 'btn-primary': showJourney }"
+          >
+            📝 My Journey
+          </button>
+          <div class="progress-indicator" x-show="currentExercise">
+            <span x-text="progressText"></span>
+            <div class="progress-bar">
+              <div class="progress-fill" :style="`width: ${progressPercent}%`"></div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="container">
+
+        <!-- Behind the Scenes Section -->
+        <div x-show="showBehindScenes" class="behind-scenes-section">
+          <div class="section-header">
+            <h2>🔍 Behind the Scenes: How This Lab Was Built</h2>
+            <button @click="showBehindScenes = false" class="btn btn-ghost">× Close</button>
+          </div>
+          <div class="behind-scenes-content" x-html="behindScenesContent"></div>
+        </div>
+
+        <!-- Welcome/Overview Screen -->
+        <div x-show="!currentExercise || showOverview" class="welcome-screen">
+          <div class="hero">
+            <h2>Master Multi-Agent Orchestration with Claude Code</h2>
+            <p class="hero-subtitle">
+              Learn through hands-on exercises that take you from fundamentals to production-ready patterns.
+            </p>
+          </div>
+
+          <div class="exercises-grid">
+            <template x-for="exercise in exercises" :key="exercise.id">
+              <div class="exercise-card" :class="getExerciseStatus(exercise.id)">
+                <div class="exercise-header">
+                  <h3 x-text="exercise.title"></h3>
+                  <div class="exercise-meta">
+                    <span class="duration" x-text="exercise.duration"></span>
+                    <span class="difficulty" x-text="exercise.difficulty"></span>
+                  </div>
+                </div>
+                
+                <p class="exercise-description" x-text="exercise.description"></p>
+                
+                <div class="exercise-objectives">
+                  <h4>Learning Objectives:</h4>
+                  <ul>
+                    <template x-for="objective in exercise.objectives">
+                      <li x-text="objective"></li>
+                    </template>
+                  </ul>
+                </div>
+                
+                <div class="exercise-actions">
+                  <div class="action-buttons">
+                    <button
+                      @click="startExercise(exercise.id)"
+                      class="btn btn-primary"
+                      x-text="getActionText(exercise.id)"
+                    ></button>
+
+                    <button
+                      x-show="getExerciseProgress(exercise.id) > 0"
+                      @click="startOver(exercise.id)"
+                      class="btn btn-outline btn-small"
+                    >
+                      🔄 Start Over
+                    </button>
+                  </div>
+
+                  <div class="exercise-progress" x-show="getExerciseProgress(exercise.id) > 0">
+                    <div class="progress-bar small">
+                      <div class="progress-fill" :style="`width: ${getExerciseProgress(exercise.id)}%`"></div>
+                    </div>
+                    <span class="progress-text" x-text="`${getExerciseProgress(exercise.id)}% complete`"></span>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- My Journey Section -->
+        <div x-show="currentExercise && showJourney" class="journey-section">
+          <div class="section-header">
+            <h2>📝 My Implementation Journey</h2>
+            <div class="header-actions">
+              <button @click="showJourney = false" class="btn btn-outline">← Back to Exercise</button>
+              <button @click="showJourney = false" class="btn btn-ghost">× Close</button>
+            </div>
+          </div>
+
+          <div class="journey-content">
+            <!-- Progress Summary -->
+            <div class="journey-progress">
+              <h3>📊 Progress Summary</h3>
+              <div class="progress-stats">
+                <div class="stat">
+                  <span class="stat-number" x-text="getCompletedSections().length"></span>
+                  <span class="stat-label">Sections Completed</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-number" x-text="`${progressPercent}%`"></span>
+                  <span class="stat-label">Exercise Progress</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-number" x-text="getTimeSpent()"></span>
+                  <span class="stat-label">Time Invested</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Implementation Documentation -->
+            <div class="journey-implementation">
+              <h3>💻 Implementation Documentation</h3>
+              <div class="implementation-form">
+                <div class="form-group">
+                  <label>Key Files Created/Modified:</label>
+                  <textarea
+                    x-model="journeyData.filesModified"
+                    placeholder="List the main files you worked on (e.g., src/context-manager.js, .claude/agents/coordinator.md)"
+                    rows="3"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label>Biggest Challenge Overcome:</label>
+                  <textarea
+                    x-model="journeyData.biggestChallenge"
+                    placeholder="What was the most difficult part and how did you solve it?"
+                    rows="3"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label>Key Code Snippet to Remember:</label>
+                  <textarea
+                    x-model="journeyData.keyCodeSnippet"
+                    placeholder="Paste a code snippet that represents your solution"
+                    rows="4"
+                    class="code-input"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label>Patterns Discovered:</label>
+                  <textarea
+                    x-model="journeyData.patternsDiscovered"
+                    placeholder="What reusable patterns did you implement that could help in future projects?"
+                    rows="3"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label>What Would You Do Differently?</label>
+                  <textarea
+                    x-model="journeyData.wouldDoDifferently"
+                    placeholder="If you started over, what would you change about your approach?"
+                    rows="3"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label>Implementation Rating:</label>
+                  <div class="rating-group">
+                    <template x-for="star in 5" :key="star">
+                      <button
+                        @click="journeyData.rating = star"
+                        class="rating-star"
+                        :class="{ 'active': star <= journeyData.rating }"
+                      >
+                        ⭐
+                      </button>
+                    </template>
+                    <span class="rating-text" x-text="getRatingText()"></span>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button @click="saveJourney()" class="btn btn-primary">💾 Save Journey</button>
+                  <button @click="exportJourney()" class="btn btn-outline">📄 Export Summary</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Journey Timeline -->
+            <div class="journey-timeline" x-show="journeyData.timeline.length > 0">
+              <h3>⏰ Implementation Timeline</h3>
+              <div class="timeline">
+                <template x-for="entry in journeyData.timeline" :key="entry.timestamp">
+                  <div class="timeline-entry">
+                    <div class="timeline-time" x-text="formatTime(entry.timestamp)"></div>
+                    <div class="timeline-content">
+                      <strong x-text="entry.section"></strong>
+                      <span x-text="entry.action"></span>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exercise Content -->
+        <div x-show="currentExercise && !showOverview && !showJourney" class="exercise-content">
+          <div class="exercise-sidebar">
+            <button @click="showOverview = true" class="btn btn-ghost btn-small">
+              ← Back to Overview
+            </button>
+
+            <button
+              @click="startOver(currentExercise)"
+              class="btn btn-outline btn-small"
+              style="margin-top: 0.5rem;"
+            >
+              🔄 Start Over
+            </button>
+            
+            <div class="exercise-nav">
+              <h4>Sections</h4>
+              <template x-for="section in currentExerciseData.sections" :key="section.id">
+                <a 
+                  @click="navigateToSection(section.id)"
+                  class="section-link"
+                  :class="{
+                    'active': currentSection === section.id,
+                    'completed': isSectionCompleted(section.id)
+                  }"
+                >
+                  <span class="section-icon" x-text="getSectionIcon(section.id)"></span>
+                  <span x-text="section.title"></span>
+                </a>
+              </template>
+            </div>
+          </div>
+
+          <div class="exercise-main">
+            <div class="section-content" x-html="currentSectionContent"></div>
+            
+            <div class="section-navigation">
+              <button 
+                x-show="hasPreviousSection"
+                @click="previousSection()"
+                class="btn btn-outline"
+              >
+                ← Previous
+              </button>
+              
+              <button 
+                x-show="hasNextSection"
+                @click="nextSection()"
+                class="btn btn-primary"
+                :disabled="!canProceed"
+              >
+                Next →
+              </button>
+              
+              <button 
+                x-show="isLastSection"
+                @click="completeExercise()"
+                class="btn btn-success"
+                :disabled="!canProceed"
+              >
+                Complete Exercise ✓
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2025 Claude Multi-Agent Learning Lab</p>
+        <p>Built with ❤️ using multi-agent patterns</p>
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html>
