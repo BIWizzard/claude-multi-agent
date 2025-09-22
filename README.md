@@ -1,5 +1,10 @@
 # Claude Code Multi-Agent Orchestration Mastery
 
+## 🤖 **FOR CLAUDE CODE AGENTS: [START HERE](./CLAUDE_CODE_START_HERE.md)**
+### **If you are a Claude Code agent beginning a new session, STOP and read the context files first.**
+
+---
+
 ## 🎯 Project Mission
 A structured learning laboratory for mastering multi-agent workflows in Claude Code through hands-on exercises, clean context management, and progressive skill building.
 
