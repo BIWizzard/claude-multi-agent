@@ -1,0 +1,16 @@
+# Claude Code Commit Template
+#
+# Format: type(scope): brief description
+#
+# Types: feat, fix, docs, style, refactor, test, chore, arch
+# Scopes: ui, content, data, config, build, workflow
+#
+# Body:
+# - Detailed explanation of what and why
+# - Reference TodoWrite tasks if applicable
+# - Include testing/validation notes
+#
+# Footer:
+# ✅ Task: [TodoWrite task reference]
+# 🤖 Generated with Claude Code
+# Co-Authored-By: Claude <noreply@anthropic.com>
